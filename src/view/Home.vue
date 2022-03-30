@@ -6,7 +6,7 @@
         <h1>貔貅UI</h1>
         <h2>一个简易的 UI 框架</h2>
         <p class="actions">
-          <a href="https://github.com/shenjingwa444/pixiu-ui-source">Github</a>
+          <a href="https://gitee.com/shenjingwa444/pixiu-ui-source">Github</a>
           <router-link to="/Doc">开始</router-link>
         </p>
       </div>
