@@ -14,48 +14,45 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import Tab from './Tab.vue';
-import {computed, ref, watchEffect} from 'vue';
-
-export default {
-  props: {
-    selected: {
-      type: String,
-    }
-  },
-  setup(props, context) {
-    const selectedItem = ref<HTMLDivElement>(null);
-    const container = ref<HTMLDivElement>(null);
-    const indicator = ref<HTMLDivElement>(null);
-    watchEffect(() => {
-      const {width} = selectedItem.value.getBoundingClientRect();
-      indicator.value.style.width = width + 'px';
-      const {left: left1} = container.value.getBoundingClientRect();
-      const {left: left2} = selectedItem.value.getBoundingClientRect();
-      const left = left2 - left1;
-      indicator.value.style.left = left + 'px';
-    }, {flush: 'post'});
-    const defaults = context.slots.default();
-    const titles = defaults.map(tag => tag.props.title);
-    const current = computed(() => {
-      return defaults.filter((tag) => {
-        return tag.props.title === props.selected;
-      })[0];
-    });
-    defaults.forEach((tag) => {
-      if (tag.type !== Tab) {
-        throw new Error('Tabs 字标签必须是 Tab');
+import {computed, ref, useSlots, watchEffect} from 'vue';
+const props = defineProps(
+    {
+      selected: {
+        type: String,
       }
-    });
-    const select = (title) => {
-      context.emit('update:selected', title);
-    };
-    return {
-      defaults, titles, current, select, indicator, container, selectedItem,
-    };
+    }
+);
+const selectedItem = ref<HTMLDivElement>(null);
+const container = ref<HTMLDivElement>(null);
+const indicator = ref<HTMLDivElement>(null);
+watchEffect(() => {
+  const {width} = selectedItem.value.getBoundingClientRect();
+  indicator.value.style.width = width + 'px';
+  const {left: left1} = container.value.getBoundingClientRect();
+  const {left: left2} = selectedItem.value.getBoundingClientRect();
+  const left = left2 - left1;
+  indicator.value.style.left = left + 'px';
+}, {flush: 'post'});
+const slots = useSlots();
+const defaults = slots.default();
+const titles = defaults.map(tag => tag.props.title);
+const current = computed(() => {
+  return defaults.filter((tag) => {
+    return tag.props.title === props.selected;
+  })[0];
+});
+defaults.forEach((tag) => {
+  if (tag.type !== Tab) {
+    throw new Error('Tabs 字标签必须是 Tab');
   }
+});
+const emit = defineEmits(['update:selected']);
+const select = (title) => {
+  emit('update:selected', title);
 };
+
 </script>
 
 <style lang="scss">

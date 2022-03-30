@@ -22,53 +22,49 @@
   </template>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import Button from './Button.vue';
+import {defineEmits} from 'vue';
 
-export default {
-  components: {Button},
-  props: {
-    visible: {
-      type: Boolean,
-      default: false,
-    },
-    closeOnClickOverlay: {
-      type: Boolean,
-      default: true,
-    },
-    ok: {
-      type: Function,
-    },
-    cancel: {
-      type: Function,
-    },
-    title: {
-      type: String,
-      default: '提示',
-    }
-  },
-  setup(props, context) {
-    const close = () => {
-      context.emit('update:visible', !props.visible);
-    };
-    const onClickOverlay = () => {
-      if (props.closeOnClickOverlay) {
-        close();
+const props = defineProps(
+    {
+      visible: {
+        type: Boolean,
+        default: false,
+      },
+      closeOnClickOverlay: {
+        type: Boolean,
+        default: true,
+      },
+      ok: {
+        type: Function,
+      },
+      cancel: {
+        type: Function,
+      },
+      title: {
+        type: String,
+        default: '提示',
       }
-    };
-    const ok = () => {
-      if (props.ok && props.ok() !== false) {
-        close();
-      }
-    };
-    const cancel = () => {
-      props.cancel?.()
-      close();
-    };
-    return {
-      close, onClickOverlay, ok, cancel
-    };
+    },
+);
+const emit = defineEmits(['update:visible']);
+const close = () => {
+  emit('update:visible', !props.visible);
+};
+const onClickOverlay = () => {
+  if (props.closeOnClickOverlay) {
+    close();
   }
+};
+const ok = () => {
+  if (props.ok && props.ok() !== false) {
+    close();
+  }
+};
+const cancel = () => {
+  props.cancel?.();
+  close();
 };
 </script>
 
