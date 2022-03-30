@@ -12,8 +12,8 @@ export default {
     globals: {
       vue: 'Vue'
     },
-    name: 'Gulu',
-    file: 'dist/lib/gulu.js',
+    name: 'Pixiu',
+    file: 'dist/lib/pixiu.js',
     format: 'umd',
     plugins: [terser()]
   },
